@@ -15,13 +15,18 @@ class RealTimeRemoteDataSource {
     suspend fun getDollarUpdates(): Flow<DollarModel> = callbackFlow {
         val callback = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                // Se reemplaza el TODO por una implementación real.
                 close(p0.toException())
             }
             override fun onDataChange(p0: DataSnapshot) {
-//                val value = p0.getValue(String::class.java)
+
                 val value = p0.getValue(DollarModel::class.java)
+
                 if (value != null) {
+                    // Tarea: Agregar un texto que muestre la fecha de actualización (1 punto)
+                    val updatedAt = p0.child("updatedAt").value as? Long ?: System.currentTimeMillis()
+                    value.updatedAt = updatedAt
+
                     trySend(value)
                 }
             }
