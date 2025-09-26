@@ -8,6 +8,6 @@ class MovieRepository(
     private val movieRemoteDataSource: MovieRemoteDataSource
 ): IMoviesRepository {
     override suspend fun fetchPopularMovies(): Result<List<MovieModel>>
-    = movieRemoteDataSource.fetchPopularMovies()
+    = movieRemoteDataSource.getPopularMovies()
 
 }
