@@ -14,7 +14,7 @@ fun MovieEntity.toModel(): MovieModel {
 
 // Model (Dominio) -> Entity (Room)
 fun MovieModel.toEntity(): MovieEntity {
-    return MovieEntityy(
+    return MovieEntity(
         id = id,
         pathUrl = pathUrl,
         title = title
