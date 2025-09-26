@@ -8,7 +8,7 @@ import com.calyrsoft.ucbp1.features.movie.data.database.entity.MovieEntity
 
 @Dao
 interface IMovieDao {
-    // Clave: Si el ID existe, reemplaza (actualiza) el registro. (30 puntos)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovies(movies: List<MovieEntity>)
 

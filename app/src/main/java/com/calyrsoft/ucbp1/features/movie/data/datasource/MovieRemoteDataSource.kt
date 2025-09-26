@@ -4,19 +4,33 @@ import com.calyrsoft.ucbp1.features.movie.data.api.MovieService
 import com.calyrsoft.ucbp1.features.movie.domain.model.MovieModel
 
 class MovieRemoteDataSource(
-    private val movieServie: MovieService,
-    private val apiKey: String
+    val service: MovieService,
+    val apiKey: String
 ) {
-    suspend fun fetchPopularMovies(): Result<List<MovieModel>> {
-        val response = movieServie.fetchPopularMovies(apiKey = apiKey)
-        return if (response.isSuccessful) {
-            val moviePage = response.body()
-            if (moviePage != null) {
-                return Result.success(moviePage.results.map { dto ->  MovieModel("https://image.tmdb.org/t/p/w185"+dto.pathUrl, dto.title) } )
+
+    suspend fun getPopularMovies(): Result<List<MovieModel>> {
+        return try {
+            val response = service.fetchPopularMovies(apiKey = apiKey)
+            if (response.isSuccessful) {
+                val moviePageDto = response.body()
+                if (moviePageDto != null) {
+                    val movies = moviePageDto.results.map { dto ->
+                        // LÍNEA CORREGIDA PARA EL MAPEO
+                        MovieModel(
+                            id = dto.id, // Debe existir en MovieModel y MovieDto
+                            pathUrl = "https://image.tmdb.org/t/p/w185/" + dto.poster_path,
+                            title = dto.title
+                        )
+                    }
+                    Result.success(movies)
+                } else {
+                    Result.failure(Exception("No content or body is null"))
+                }
+            } else {
+                Result.failure(Exception("Error en la respuesta HTTP: ${response.code()}"))
             }
-            Result.success(emptyList())
-        } else {
-            Result.failure(Exception("Error"))
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

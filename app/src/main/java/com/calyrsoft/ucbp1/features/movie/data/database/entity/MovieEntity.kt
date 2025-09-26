@@ -10,7 +10,7 @@ data class MovieEntity(
     @ColumnInfo(name = "id")
     val id: Int,
 
-    @ColumnInfo(name = "path_url")
+    @ColumnInfo(name = "path_url") // Usamos path_url para coincidir con MovieModel
     val pathUrl: String,
 
     @ColumnInfo(name = "title")
